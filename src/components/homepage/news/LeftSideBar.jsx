@@ -6,7 +6,7 @@ const LeftSideBar = ({categories, activeId}) => {
       <div>
         <h2 className="font-bold text-xl">All Categories</h2>
         <ul className="flex flex-col gap-3 text-center">
-          {categories.news_category.map((category) => {
+          {categories.news_category?.map((category) => {
             return (
               <li
                 key={category.category_id}

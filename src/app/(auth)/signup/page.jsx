@@ -1,5 +1,6 @@
 'use client';
 
+import { authClient } from '@/lib/auth-client';
 import { Button, Checkbox, Form, Input, Label, TextField } from '@heroui/react';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -14,13 +15,33 @@ const SignUpPage = () => {
     defaultValues: {
       name: '',
       email: '',
+      photo: '',
       password: '',
       terms: false,
     },
   });
 
-  const handleSignUpFunc = (data) => {
-    console.log(data);
+  const handleSignUpFunc = async(formData) => {
+    console.log(formData);
+    const {name, email, password,photo}= formData;
+    console.log(name, email, photo);
+
+    const { data, error } = await authClient.signUp.email({
+      name: name, // required, The name of the user.
+      email: email, // required, The email address of the user.
+      password: password, // required, The password of the user. It should be at least 8 characters long and max 128 by default.
+      image: photo, // An optional profile image of the user.
+      callbackURL: "/", // An optional URL to redirect to after the user signs up.
+    });
+    console.log(data, error);
+
+    if(error){
+      alert(error.message);
+    }
+    if(data){
+      alert("Signup Successful");
+    }
+
   };
 
   return (
@@ -65,6 +86,15 @@ const SignUpPage = () => {
               <p className="text-sm text-red-500">{errors.email.message}</p>
             )}
           </TextField>
+          <TextField>
+            <Label>Photo URL</Label>
+            <Input
+              className="w-full"
+              type="url"
+              placeholder="Enter your photo url"
+              {...register("photo")}
+            ></Input>
+          </TextField>
 
           <TextField className="w-full">
             <Label>Password</Label>
@@ -84,8 +114,6 @@ const SignUpPage = () => {
               <p className="text-sm text-red-500">{errors.password.message}</p>
             )}
           </TextField>
-
-          
 
           <Button fullWidth type="submit">
             Register Now

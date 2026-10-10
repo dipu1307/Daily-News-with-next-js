@@ -1,18 +1,26 @@
-
+'use client';
 import React from 'react';
 
 import { Button,ListBox,Label} from "@heroui/react";
 import { Icon } from "@iconify/react";
+import { authClient } from '@/lib/auth-client';
 
 
 
 const RighSideBar = () => {
+
+  const handleGoogleSignIn = async() =>{
+     const data = await authClient.signIn.social({
+    provider: "google",
+  });
+  console.log()
+  }
     return (
       <div>
         <h2 className="mb-5 font-semibold text-lg">Login With</h2>
 
         <div className="flex w-full max-w-xs flex-col gap-3">
-          <Button className="w-full" variant="tertiary">
+          <Button className="w-full" variant="tertiary" onClick={handleGoogleSignIn}>
             <Icon icon="devicon:google" />
             Sign in with Google
           </Button>
